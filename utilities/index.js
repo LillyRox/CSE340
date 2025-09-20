@@ -23,7 +23,7 @@ Util.getNav = async function (req, res, next) {
   })
   list += "</ul>"
   return list
-}
+};
 
 /* **************************************
 * Build the classification view HTML
@@ -56,9 +56,25 @@ Util.buildClassificationGrid = async function(data){
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
   return grid
-}
+};
 
 
+/* **************************************
+ * Build the vehicle detail view HTML
+ * ************************************ */
+Util.buildVehicleDetail = function (vehicle) {
+  let detail = `<div class="vehicle-detail">`;
+  detail += `<img src="${vehicle.inv_image}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">`;
+  detail += `<div class="vehicle-info">`;
+  detail += `<h2>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h2>`;
+  detail += `<p><strong>Price:</strong> $${new Intl.NumberFormat("en-US").format(vehicle.inv_price)}</p>`;
+  detail += `<p><strong>Mileage:</strong> ${new Intl.NumberFormat("en-US").format(vehicle.inv_miles)} miles</p>`;
+  detail += `<p><strong>Color:</strong> ${vehicle.inv_color}</p>`;
+  detail += `<p><strong>Description:</strong> ${vehicle.inv_description}</p>`;
+  detail += `</div>`;
+  detail += `</div>`;
+  return detail;
+};
 
 
 module.exports = Util
