@@ -8,4 +8,4 @@ router.get("/type/:classificationId", invController.buildByClassificationId);
 module.exports = router;
 
 // Agrega esta línea
-router.get("/detail/:inv_id", invController.buildDetailView);
+//router.get("/detail/:inv_id", invController.buildDetailView);
