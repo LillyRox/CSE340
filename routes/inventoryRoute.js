@@ -49,4 +49,10 @@ router.post(
   invController.addInventory
 )
 
+// Add Classification - process the form
+router.post(
+  "/add-classification",
+  utilities.handleErrors(invController.addClassification)
+)
+
 module.exports = router
