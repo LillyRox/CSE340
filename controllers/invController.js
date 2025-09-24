@@ -55,4 +55,107 @@ invCont.triggerError = (req, res, next) => {
   }
 };
 
+
+/* ***************************
+ *  Build Management View
+ * ************************** */
+invCont.buildManagement = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  res.render("./inventory/management", {
+    title: "Inventory Management",
+    nav,
+    errors: null
+  })
+}
+
+
+
+/* ***************************
+ *  Build Add Classification view
+ * ************************** */
+invCont.buildAddClassification = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  res.render("./inventory/add-classification", {
+    title: "Add Classification",
+    nav,
+    errors: null,
+  })
+}
+
+/* ***************************
+ *  Process Add Classification
+ * ************************** */
+invCont.addClassification = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  const { classification_name } = req.body
+  try {
+    const result = await invModel.addClassification(classification_name)
+    if (result.rowCount > 0) {
+      req.flash("notice", `Classification "${classification_name}" added successfully.`)
+      res.redirect("/inv/")
+    } else {
+      req.flash("notice", "Failed to add classification.")
+      res.render("./inventory/add-classification", {
+        title: "Add Classification",
+        nav,
+        errors: null,
+        classification_name
+      })
+    }
+  } catch (error) {
+    next(error) 
+  }
+}
+
+
+/* ***************************
+ *  Build Add Inventory View
+ * ************************** */
+invCont.buildAddInventory = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  let classificationList = await utilities.buildClassificationList()
+  res.render("./inventory/add-inventory", {
+    title: "Add New Vehicle",
+    nav,
+    classificationList,
+    errors: null,
+    locals: req.body 
+  })
+}
+
+/* ***************************
+ *  Process Add Inventory
+ * ************************** */
+invCont.addInventory = async function (req, res, next) {
+  try {
+    const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body
+
+    // 
+    const result = await invModel.addInventory(
+      classification_id, inv_make, inv_model, inv_year, inv_description,
+      inv_image, inv_thumbnail, inv_price, inv_miles, inv_color
+    )
+
+    if (result) {
+      req.flash("notice", "Vehicle added successfully!")
+      res.redirect("/inv/")
+    } else {
+      let nav = await utilities.getNav()
+      let classificationList = await utilities.buildClassificationList(classification_id)
+      req.flash("notice", "Failed to add vehicle.")
+      res.status(400).render("./inventory/add-inventory", {
+        title: "Add New Vehicle",
+        nav,
+        classificationList,
+        errors: null,
+        locals: req.body
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+
 module.exports = invCont;

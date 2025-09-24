@@ -1,8 +1,26 @@
-// Needed Resources 
+// Needed Resources
 const express = require("express")
 const router = new express.Router()
 const invController = require("../controllers/invController")
 const utilities = require("../utilities")
+
+// Management View (Task 1)
+router.get(
+  "/",
+  utilities.handleErrors(invController.buildManagement)
+)
+
+// Add Classification View (Task 2)
+router.get(
+  "/add-classification",
+  utilities.handleErrors(invController.buildAddClassification)
+)
+
+// Add Inventory View (Task 3)
+router.get(
+  "/add-inventory",
+  utilities.handleErrors(invController.buildAddInventory)
+)
 
 // Route to build inventory by classification view
 router.get(
@@ -20,6 +38,15 @@ router.get(
 router.get(
   "/error-trigger",
   utilities.handleErrors(invController.triggerError)
+)
+
+router.post(
+  "/add-inventory",
+  utilities.handleErrors((req, res, next) => {
+    console.log("POST /inv/add-inventory reached");
+    next();
+  }),
+  invController.addInventory
 )
 
 module.exports = router
