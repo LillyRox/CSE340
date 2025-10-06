@@ -2,37 +2,41 @@
 const express = require("express")
 const router = new express.Router()
 const utilities = require("../utilities")
-const accountsController = require("../controllers/accountController")
-const regValidate = require('../utilities/account-validation');
-
+const accountController = require("../controllers/accountController")
+const regValidate = require("../utilities/account-validation")
 
 // Route to build login view
 router.get(
   "/login",
-  utilities.handleErrors(accountsController.buildLogin)
+  utilities.handleErrors(accountController.buildLogin)
 )
 
 // Route to build registration view
 router.get(
-    "/register", 
-    utilities.handleErrors(accountsController.buildRegister)
+  "/register",
+  utilities.handleErrors(accountController.buildRegister)
 )
 
 // Route to process registration form
 router.post(
   "/register",
-  regValidate.registationRules(),
+  regValidate.registrationRules(),
   regValidate.checkRegData,
-  utilities.handleErrors(accountsController.registerAccount)
+  utilities.handleErrors(accountController.registerAccount)
 )
 
-// Process the login attempt
+// Process the login request
 router.post(
   "/login",
-  (req, res) => {
-    res.status(200).send('login process');
-  }
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  utilities.handleErrors(accountController.accountLogin)
+)
+
+// ✅ Default route for Account Management view
+router.get(
+  "/",
+  utilities.handleErrors(accountController.buildAccountManagement)
 )
 
 module.exports = router
-
