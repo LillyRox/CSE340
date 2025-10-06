@@ -128,7 +128,7 @@ invCont.buildAddInventory = async function (req, res, next) {
     let nav = await utilities.getNav()
     let classificationList = await utilities.buildClassificationList()
 
-    // Desestructuramos req.body para asegurar que cada variable exista
+    
     const {
       inv_make = "",
       inv_model = "",
@@ -234,9 +234,9 @@ invCont.getInventoryJSON = async (req, res, next) => {
  * ************************** */
 invCont.editInventoryView = async function (req, res, next) {
   try {
-    const inv_id = parseInt(req.params.inv_id) // recoger ID
+    const inv_id = parseInt(req.params.inv_id) 
     let nav = await utilities.getNav()
-    const itemData = await invModel.getInventoryById(inv_id) // traer datos del vehículo
+    const itemData = await invModel.getInventoryById(inv_id) 
     const classificationSelect = await utilities.buildClassificationList(itemData.classification_id)
     const itemName = `${itemData.inv_make} ${itemData.inv_model}`
 

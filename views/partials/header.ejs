@@ -6,6 +6,18 @@
   </div>
 
   <div id="tools" class="user-tools">
-    <a href="/account/login" title="Click to log in to your account">My Account</a>
+    <% if (!locals.accountData) { %>
+      <!-- Usuario no logueado -->
+      <a href="/account/login" title="Click to log in to your account">My Account</a>
+    <% } else { %>
+      <!-- Usuario logueado -->
+      <span>Welcome <%= accountData.account_firstname %></span>
+      <a href="/account/logout" title="Click to log out">Logout</a>
+
+      <% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
+        <!-- Link extra solo para Employee/Admin -->
+        <a href="/inv/" title="Go to Inventory Management">Inventory Management</a>
+      <% } %>
+    <% } %>
   </div>
 </header>

@@ -33,11 +33,45 @@ router.post(
   utilities.handleErrors(accountController.accountLogin)
 )
 
-// ✅ Default route for Account Management view
+// Default route for Account Management view
 router.get(
   "/",
   utilities.checkLogin,
   utilities.handleErrors(accountController.buildAccountManagement)
 )
+
+// =======================
+// Account Update / Password
+// =======================
+
+// Route to build account update view
+router.get(
+  "/update/:account_id",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.updateView)
+)
+
+// Route to process account info update
+router.post(
+  "/update-info",
+  regValidate.accountValidationRules(),  // validate first name, last name, email
+  utilities.handleErrors(accountController.updateAccount)
+)
+
+// Route to process password change
+router.post(
+  "/update-password",
+  regValidate.passwordValidationRules(), // validate password
+  utilities.handleErrors(accountController.updatePassword)
+)
+
+// =======================
+// Logout
+// =======================
+router.get("/logout", (req, res) => {
+  res.clearCookie("jwt") 
+  res.redirect("/")      
+})
+
 
 module.exports = router
