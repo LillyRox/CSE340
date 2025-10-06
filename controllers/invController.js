@@ -327,5 +327,44 @@ invCont.updateInventory = async function (req, res, next) {
   }
 }
 
+invCont.confirmDeleteInventory = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.params.inv_id)
+    const itemData = await invModel.getInventoryById(inv_id)
+    
+    if (!itemData) {
+      throw new Error("Inventory item not found")
+    }
+
+    const nav = await utilities.getNav()
+    res.render("./inventory/delete-inventory", {
+      title: `Delete ${itemData.inv_make} ${itemData.inv_model}`,
+      nav,
+      inv_id: itemData.inv_id,
+      inv_make: itemData.inv_make,
+      inv_model: itemData.inv_model
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+invCont.deleteInventory = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.body.inv_id)
+    const deleteResult = await invModel.deleteInventory(inv_id)
+
+    if (deleteResult) {
+      req.flash("notice", "Inventory item successfully deleted.")
+      res.redirect("/inv/")
+    } else {
+      req.flash("notice", "Failed to delete inventory item.")
+      res.redirect("/inv/")
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
 
 module.exports = invCont
