@@ -36,6 +36,7 @@ router.post(
 // ✅ Default route for Account Management view
 router.get(
   "/",
+  utilities.checkLogin,
   utilities.handleErrors(accountController.buildAccountManagement)
 )
 
