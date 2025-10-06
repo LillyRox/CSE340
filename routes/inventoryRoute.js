@@ -2,7 +2,8 @@
 const express = require("express")
 const router = new express.Router()
 const invController = require("../controllers/invController")
-const utilities = require("../utilities")
+const inventoryValidation = require("../utilities/inventory-validation")
+const utilities = require("../utilities") // tus utilidades generales
 
 // Management View (Task 1)
 router.get(
@@ -34,19 +35,18 @@ router.get(
   utilities.handleErrors(invController.buildDetail)
 )
 
-// Route to intentionally trigger a 500 error (Task 3)
+// Route to intentionally trigger a 500 error
 router.get(
   "/error-trigger",
   utilities.handleErrors(invController.triggerError)
 )
 
+// Process Add Inventory
 router.post(
   "/add-inventory",
-  utilities.handleErrors((req, res, next) => {
-    console.log("POST /inv/add-inventory reached");
-    next();
-  }),
-  invController.addInventory
+  inventoryValidation.newInventoryRules(),
+  inventoryValidation.checkInventoryData,
+  utilities.handleErrors(invController.addInventory)
 )
 
 // Add Classification - process the form
@@ -55,10 +55,24 @@ router.post(
   utilities.handleErrors(invController.addClassification)
 )
 
-router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+// JSON route for inventory
+router.get(
+  "/getInventory/:classification_id",
+  utilities.handleErrors(invController.getInventoryJSON)
+)
 
 // Route to build edit inventory view
-router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView))
+router.get(
+  "/edit/:inv_id",
+  utilities.handleErrors(invController.editInventoryView)
+)
 
+// Update Inventory
+router.post(
+  "/update",
+  inventoryValidation.newInventoryRules(),
+  inventoryValidation.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory)
+)
 
 module.exports = router
