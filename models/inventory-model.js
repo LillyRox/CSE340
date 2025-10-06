@@ -67,5 +67,20 @@ async function addInventory(classification_id, inv_make, inv_model, inv_year, in
   }
 }
 
+/* ***************************
+ *  Get inventory item by ID
+ * ************************** */
+async function getInventoryById(inv_id) {
+  try {
+    const sql = "SELECT * FROM inventory WHERE inv_id = $1"
+    const values = [inv_id]
+    const result = await pool.query(sql, values)
+    return result.rows[0]  // devuelve un solo objeto
+  } catch (error) {
+    console.error("Error in getInventoryById: ", error)
+    throw error
+  }
+}
 
-module.exports = {getClassifications, getInventoryByClassificationId, getVehicleById, addClassification, addInventory};
+
+module.exports = {getClassifications, getInventoryByClassificationId, getVehicleById, addClassification, addInventory, getInventoryById};
