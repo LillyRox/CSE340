@@ -42,6 +42,8 @@ invCont.buildDetail = async function (req, res, next) {
       title: `${data.inv_make} ${data.inv_model}`,
       nav,
       detail: html,
+      vehicle: data,
+      messages: req.flash()
     })
   } catch (error) {
     next(error)

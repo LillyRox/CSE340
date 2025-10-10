@@ -14,6 +14,7 @@ const expressLayouts = require("express-ejs-layouts")
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
+const favoriteRoute = require("./routes/favoriteRoute")
 const session = require("express-session")
 const pool = require('./database/')
 const accountRoute = require("./routes/accountRoute")
@@ -37,6 +38,13 @@ const bodyParser = require("body-parser")
 app.use(cookieParser())
 
 app.use(utilities.checkJWTToken)
+
+// Make login status available to all views
+app.use((req, res, next) => {
+  res.locals.loggedin = req.session.loggedin
+  next()
+})
+
 
 // Express Messages Middleware
 app.use(require('connect-flash')())
@@ -67,6 +75,10 @@ app.use("/inv", inventoryRoute)
 
 // Account routes 
 app.use("/account", accountRoute)
+
+// Favorites route
+
+app.use("/favorites", favoriteRoute)
 
 
 // File Not Found Route - must be last route in list

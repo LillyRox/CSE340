@@ -1,10 +1,23 @@
 <% if (title) { %>
-<h1><%= title %></h1>
+  <h1><%= title %></h1>
 <% } else {
   res.redirect('/')
 } %>
 
 <%# messages() %>
 
-<%- detail %>
+<div class="vehicle-detail-wrapper">
+  <%- detail %>
 
+  <% /* actions area: favorites button (only for logged in users) */ %>
+  <% if (loggedin && vehicle) { %>
+    <div class="vehicle-actions">
+      <form method="POST" action="/favorites/add" class="fav-add-form">
+        <input type="hidden" name="inv_id" value="<%= vehicle.inv_id %>">
+        <button type="submit">⭐ Add to Favorites</button>
+      </form>
+    </div>
+  <% } else { %>
+    <p><a href="/account/login">Log In</a> to save this vehicle to your favorites. </p>
+  <% } %>
+</div>

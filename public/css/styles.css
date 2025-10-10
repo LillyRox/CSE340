@@ -5,8 +5,8 @@
   --secondary-color: #0072CE;     
   --text-color: #ffffff;          
   --background-color: #f0f4f8;    
-  --link-color: #cce4ff;           
-  --link-hover-color: #a0c8ff;    
+  --link-color: #366dab;           
+  --link-hover-color: #123a72;    
   --nav-bg-color: var(--primary-color);
 
   /* Font Sizes */
@@ -404,4 +404,10 @@ section.hero p {
 
 .inventory-form button:hover {
   background-color: var(--secondary-color);
+}
+
+.flash-message {
+  color: green;
+  font-weight: bold;
+  margin: 10px 0;
 }
